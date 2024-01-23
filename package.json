@@ -1,0 +1,35 @@
+{
+  "name": "ichat",
+  "version": "1.0.0",
+  "description": "Private Chat Application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mosefatullah/ichat.git"
+  },
+  "author": "Mohammad Sefatullah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mosefatullah/ichat/issues"
+  },
+  "homepage": "https://github.com/mosefatullah/ichat#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
