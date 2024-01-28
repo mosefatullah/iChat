@@ -6,12 +6,12 @@ const {
  addUser,
  removeUser,
 } = require("../controllers/usersController");
-const decorateHtmlResponse = require("../middlewares/decorateHtmlResponse");
-const avatarUpload = require("../middlewares/avaterUpload");
+const decorateHtmlResponse = require("../middlewares/common/decorateHtmlResponse");
+const avatarUpload = require("../middlewares/users/avatarUpload");
 const {
  addUserValidators,
  addUserValidationHandler,
-} = require("../middlewares/userValidators");
+} = require("../middlewares/users/userValidators");
 
 router.get("/", decorateHtmlResponse("Users"), getUsers);
 router.post(

@@ -3,7 +3,7 @@ const createError = require("http-errors");
 const path = require("path");
 const { unlink } = require("fs");
 
-const User = require("../models/People");
+const User = require("../../models/People");
 
 const addUserValidators = [
  check("name")

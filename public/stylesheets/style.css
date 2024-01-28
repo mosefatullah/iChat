@@ -193,9 +193,9 @@ input[type="submit"]:active {
     /275px 1fr;
   min-width: 800px;
   max-width: 1000px;
-  max-height: 800px;
+  max-height: 600px;
   width: 100%;
-  height: 95vh;
+  height: 90vh;
   background: var(--primary);
   border-radius: 10px;
 }
@@ -428,8 +428,7 @@ input[type="submit"]:active {
   background: var(--primary);
   outline: none;
   padding: 15px;
-  border: 2px solid var(--dark);
-  color: #330;
+  color: #fff;
   border-radius: 6px;
   font-size: 1.4rem;
 }
@@ -483,7 +482,7 @@ input[type="submit"]:active {
   display: grid;
   min-width: 800px;
   max-width: 1000px;
-  max-height: 800px;
+  max-height: 600px;
   width: 60%;
   height: 90vh;
   background: var(--primary);
@@ -564,9 +563,9 @@ input[type="submit"]:active {
   align-items: center;
   min-width: 800px;
   max-width: 1000px;
-  max-height: 800px;
+  max-height: 600px;
   width: 100%;
-  height: 95vh;
+  height: 90vh;
   background: var(--primary);
   border-radius: 10px;
   padding: 4rem 3rem;

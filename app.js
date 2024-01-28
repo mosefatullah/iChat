@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-const { notFoundHandler, errorHandler } = require("./middlewares/errorHandler");
+const { notFoundHandler, errorHandler } = require("./middlewares/common/errorHandler");
 
 const app = express();
 dotenv.config();
