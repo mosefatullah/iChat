@@ -7,10 +7,11 @@ const {
  doLoginValidationHandler,
 } = require("../middlewares/login/loginValidators");
 const decorateHtmlResponse = require("../middlewares/common/decorateHtmlResponse");
+const { redirectLoggedIn } = require("../middlewares/common/checkLogin");
 
 const page_title = "Login";
 
-router.get("/", decorateHtmlResponse(page_title), getLogin);
+router.get("/", decorateHtmlResponse(page_title), redirectLoggedIn, getLogin);
 router.post(
  "/",
  decorateHtmlResponse(page_title),
