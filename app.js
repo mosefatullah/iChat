@@ -1,13 +1,24 @@
 const express = require("express");
+const http = require("http");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const moment = require("moment");
 
-const { notFoundHandler, errorHandler } = require("./middlewares/common/errorHandler");
+const {
+ notFoundHandler,
+ errorHandler,
+} = require("./middlewares/common/errorHandler");
 
 const app = express();
+const server = http.createServer(app);
 dotenv.config();
+
+const io = require("socket.io")(server);
+global.io = io;
+
+app.locals.moment = moment;
 
 // Connect to DB
 mongoose
@@ -30,6 +41,6 @@ app.use("/inbox", require("./routes/inboxRouter"));
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
+server.listen(process.env.PORT, () =>
  console.log("[] Server is running on port " + process.env.PORT)
 );

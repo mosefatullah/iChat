@@ -1,5 +1,4 @@
 const createError = require("http-errors");
-const moment = require("moment");
 
 const escape = require("../utilities/escape");
 const Conversation = require("../models/Conversation");
@@ -15,9 +14,7 @@ async function getInbox(req, res) {
    ],
   });
   res.locals.data = conversations;
-  res.render("inbox", {
-   moment,
-  });
+  res.render("inbox");
  } catch (err) {
   next(err);
  }
