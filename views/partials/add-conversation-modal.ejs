@@ -2,16 +2,17 @@
     <div class="modal">
       <a onclick="closeModal()" class="modal-close">+</a>
       <div class="modal-title">
-        <h2>Create New Conversation</h2>
+        <h2>New Conversation</h2>
       </div>
       <div class="modal-body">
         <form id="add-conversation-form">
           <input
             type="text"
-            placeholder="search user by name or email or mobile"
+            placeholder="Search by username, email or mobile number"
             name="user"
             id="user"
             autocomplete="off"
+            style="margin-bottom: 20px;"
           />
           <p class="error"></p>
           <div class="search_users"></div>
@@ -22,7 +23,7 @@
   </div>
   <script>
     const modal = document.querySelector("#add-conversation-modal");
-    // typing detector
+    
     let typingTimer;
     const doneTypingInterval = 500;
     const input = document.querySelector("input#user");
@@ -37,7 +38,6 @@
   
     function closeModal() {
       modal.style.display = "none";
-      // reset
       users_placeholder.style.display = "none";
       input.value = "";
     }
@@ -45,23 +45,19 @@
       modal.style.display = "block";
     }
   
-    //on keyup, start the countdown
     input.addEventListener("keyup", function () {
       clearTimeout(typingTimer);
-      // reset
       users_placeholder.style.display = "none";
   
       if (input.value) {
-        typingTimer = setTimeout(searchUsers, doneTypingInterval); //user is "finished typing," send search request
+        typingTimer = setTimeout(searchUsers, doneTypingInterval);
       }
     });
   
-    //on keydown, clear the countdown
     input.addEventListener("keydown", function () {
       clearTimeout(typingTimer);
     });
   
-    // send request for search
     async function searchUsers() {
       let response = await fetch("/inbox/search", {
         method: "POST",
@@ -73,10 +69,8 @@
         },
       });
   
-      // get response
       let result = await response.json();
   
-      // handle error and response
       if (result.errors) {
         const errorplaceholder = document.querySelector("p.error");
         errorplaceholder.textContent = result.errors.common.msg;
@@ -105,7 +99,6 @@
       }
     }
   
-    // create Conversation
     async function createConversation(participant_id, name, avatar) {
       try {
         const response = await fetch("/inbox/conversation", {
@@ -123,10 +116,8 @@
         const result = response.json();
   
         if (!result.errors) {
-          // reset
           users_placeholder.style.display = "none";
           input.value = name;
-          // reload the page after 1 second
           setTimeout(() => {
             location.reload();
           }, 1000);

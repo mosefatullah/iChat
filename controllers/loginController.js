@@ -24,9 +24,12 @@ async function login(req, res, next) {
    const isValidPass = await bcrypt.compare(req.body.password, user.password);
    if (isValidPass) {
     const userObj = {
+     userid: user._id,
+     name: user.name,
      username: user.username,
      email: user.email,
-     role: "user",
+     avatar: user.avatar || null,
+     role: user.role || "user",
     };
     const token = jwt.sign(userObj, process.env.JWT_SECRET, {
      expiresIn: process.env.JWT_EXPIRY + "d",
@@ -62,7 +65,6 @@ async function login(req, res, next) {
 
 function logout(req, res, next) {
  res.clearCookie(process.env.COOKIE_NAME);
- console.log(req.signedCookies);
  res.send("You have been logged out.");
 }
 
