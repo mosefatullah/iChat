@@ -46,7 +46,6 @@ const redirectLoggedIn = function (req, res, next) {
  if (!cookies) {
   next();
  } else {
-    
   res.redirect("/inbox");
  }
 };
@@ -57,7 +56,7 @@ function requireRole(role) {
    next();
   } else {
    if (res.locals.html) {
-    next(createError(401, "You are not authorized to access this page!"));
+    res.redirect("/");
    } else {
     res.status(401).json({
      errors: {

@@ -123,13 +123,12 @@
         }
       });
 
-      // get messages of a conversation
       async function getMessages(conversation_id, current_conversation_name) {
 
-        // messages failure toast
         const messagesFailureToast = Toastify({
           text: "Error loading messages!",
           duration: 1000,
+          position: "center",
         });
 
         let response = await fetch(`/inbox/messages/${conversation_id}`);
@@ -193,6 +192,7 @@
         const sendMessageFailureToast = Toastify({
           text: "Error sending message",
           duration: 1000,
+          position: "center",
         });
 
         // prepare the form data
