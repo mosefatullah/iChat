@@ -500,13 +500,26 @@ input[type="submit"]:active {
   border-radius: 14px 14px 0 14px;
 }
 
+.message-row .attachments {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.message-row .attachments img {
+  max-width: 400px;
+  max-height: 500px;
+  width: 100%;
+  border-radius: 0.1rem !important;
+  cursor: pointer;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+
 #chat-form {
-  display: grid;
-  grid: 51px / 32px 1fr;
+  display: flex;
   align-content: center;
   align-items: center;
-  grid-gap: 15px;
-  grid-area: chat-form;
+  gap: 15px;
   border-radius: 0 0 10px 0;
   border-top: 2px solid rgba(0, 0, 0, 0.25);
   padding-left: 10px;
@@ -515,6 +528,7 @@ input[type="submit"]:active {
 }
 
 #chat-form input {
+  width: 100%;
   background: var(--primary);
   outline: none;
   padding: 15px;
@@ -524,13 +538,29 @@ input[type="submit"]:active {
   font-size: 1.4rem;
 }
 
-#chat-form img {
-  width: 50px;
+#chat-form button {
+  width: 34px;
+  height: 34px;
+  background: var(--primary);
+  outline: none;
+  border: 2px solid var(--dark);
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  font-size: 1.4rem;
+  cursor: pointer;
 }
 
-#chat-form img:hover {
+#chat-form label img {
+  width: 25px;
+}
+
+#chat-form label img:hover {
   cursor: pointer;
   transform: scale(1.05);
+}
+
+#chat-form button img {
+  width: 40%;
 }
 
 ::-webkit-scrollbar {

@@ -1,62 +1,76 @@
 <%- include('./partials/header.ejs'); %>
-    <div id="chat-container">
-      <div id="search-container">
-        <input type="text" placeholder="Search" />
-      </div>
-      <div id="conversation-list">
-        <% typeof data !== 'undefined' ? data.forEach(function(conversation) { %>
-          <% if(conversation.creator.id == loggedInUser.userid) { %>
-            <div class="conversation" onclick="getMessages('<%= conversation._id %>', '<%= conversation.participant.name %>')">
-              <% if (conversation.participant.avatar) { %>
-              <img src="./uploads/avatars/<%= conversation.participant.avatar %>" alt="<%= conversation.participant.name %>" />
-              <% } else { %>
-                <img src="./images/nophoto.png" />
-              <% } %>
-              <div class="title-text"><%= conversation.participant.name %></div>
-              <div class="conversation-date"><%= moment(conversation.last_updated).fromNow() %></div>
-            </div>
-          <% } else { %>
-            <div class="conversation" onclick="getMessages('<%= conversation._id %>', '<%= conversation.creator.name %>')">
-              <% if (conversation.creator.avatar) { %>
-              <img src="./uploads/avatars/<%= conversation.creator.avatar %>" alt="<%= conversation.creator.name %>" />
-              <% } else { %>
-                <img src="./images/nophoto.png" />
-              <% } %>
-              <div class="title-text"><%= conversation.creator.name %></div>
-              <div class="conversation-date"><%= moment(conversation.last_updated).fromNow() %></div>
-            </div>
-          <% } %>
-        <% }):'' %>
-        
-        <!-- show no conversation placeholder image for 0 conversations -->
-        <% if(typeof data === 'undefined' || data.length === 0) { %>
-          <div class="nothing"><img src="./images/no-conversation.svg"></div>
-        <% } %>
-      </div>
-
-      <div class="new-message-container" onclick="openModal()">
-        <a href="#">+</a>
-      </div>
-
-      <div id="chat-title">
-        <span id="conversation-partner"></span>
-        <img src="./images/trash.png" alt="Delete Conversation" />
-      </div>
-
-      <!-- placeholder div if no messages are in messages area -->
-      <div id="chat-message-list" style="padding-top: 20px;">
-        <div class="nothing">Select a conversation</div>
-      </div>
-
-      <!-- send message form -->
-      <form id="chat-form" method="post" enctype="multipart/form-data">
-        <label for="attachment"><img src="./images/attachment.png" alt="Add Attachment" /></label>
-        <input type="file" multiple name="attachment" class="hide" id="attachment" />
-        <input type="text" name="message" placeholder="Type a message" autocomplete="off" />
-      </form>
-
+  <div id="chat-container">
+    <div id="search-container">
+      <input type="text" placeholder="Search" />
     </div>
-    <%- include('./partials/add-conversation-modal.ejs'); %>
+    <div id="conversation-list">
+      <% typeof data !=='undefined' ? data.forEach(function(conversation) { %>
+        <% if(conversation.creator.id==loggedInUser.userid) { %>
+          <div class="conversation"
+            onclick="getMessages('<%= conversation._id %>', '<%= conversation.participant.name %>')">
+            <% if (conversation.participant.avatar) { %>
+              <img src="./uploads/avatars/<%= conversation.participant.avatar %>"
+                alt="<%= conversation.participant.name %>" />
+              <% } else { %>
+                <img src="./images/nophoto.png" />
+                <% } %>
+                  <div class="title-text">
+                    <%= conversation.participant.name %>
+                  </div>
+                  <div class="conversation-date">
+                    <%= moment(conversation.last_updated).fromNow() %>
+                  </div>
+          </div>
+          <% } else { %>
+            <div class="conversation"
+              onclick="getMessages('<%= conversation._id %>', '<%= conversation.creator.name %>')">
+              <% if (conversation.creator.avatar) { %>
+                <img src="./uploads/avatars/<%= conversation.creator.avatar %>"
+                  alt="<%= conversation.creator.name %>" />
+                <% } else { %>
+                  <img src="./images/nophoto.png" />
+                  <% } %>
+                    <div class="title-text">
+                      <%= conversation.creator.name %>
+                    </div>
+                    <div class="conversation-date">
+                      <%= moment(conversation.last_updated).fromNow() %>
+                    </div>
+            </div>
+            <% } %>
+              <% }):'' %>
+
+                <!-- show no conversation placeholder image for 0 conversations -->
+                <% if(typeof data==='undefined' || data.length===0) { %>
+                  <div class="nothing"><img src="./images/no-conversation.svg"></div>
+                  <% } %>
+    </div>
+
+    <div class="new-message-container" onclick="openModal()">
+      <a href="#">+</a>
+    </div>
+
+    <div id="chat-title">
+      <span id="conversation-partner"></span>
+      <img src="./images/trash.png" alt="Delete Conversation" />
+    </div>
+
+    <!-- placeholder div if no messages are in messages area -->
+    <div id="chat-message-list" style="padding-top: 20px;">
+      <div class="nothing">Select a conversation</div>
+    </div>
+
+    <!-- send message form -->
+    <form id="chat-form" method="post" enctype="multipart/form-data">
+      <label for="attachment"><img src="./images/attachment.png" alt="Add Attachment" /></label>
+      <input type="file" multiple name="attachment" class="hide" id="attachment"
+        onchange="document.querySelector('#chat-form > input[type=text]').placeholder = '['+this.files.length + ' file(s) selected] '" />
+      <input type="text" name="message" placeholder="Type a message" autocomplete="off" />
+      <button type="submit"><img src="./images/sendmsg.png" alt="Send" /></button>
+    </form>
+
+  </div>
+  <%- include('./partials/add-conversation-modal.ejs'); %>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
 
@@ -73,14 +87,14 @@
       const socket = io('<%= process.env.APP_URL %>');
 
       socket.on("new_message", data => {
-        if(data.message.conversation_id == current_conversation_id) {
+        if (data.message.conversation_id == current_conversation_id) {
           const messageClass = data.message.sender.id === loggedinUserId ? 'you-message' : 'other-message';
-          
+
           const senderAvatar = data.message.sender.avatar ? `<img src="./uploads/avatars/${data.message.sender.avatar}" alt="${data.message.sender.name}" />` : `<img src="./images/nophoto.png" alt="${data.message.sender.name}" />`;
 
           let attachments = '<div class="attachments">';
 
-          if(data.message.attachment && data.message.attachment.length > 0) {
+          if (data.message.attachment && data.message.attachment.length > 0) {
             data.message.attachment.forEach(attachment => {
               attachments += `<img src="./uploads/attachments/${attachment}" /> `;
             });
@@ -90,7 +104,7 @@
 
           let messageHTML;
 
-          if(data.message.sender.id == loggedinUserId) {
+          if (data.message.sender.id == loggedinUserId) {
             messageHTML = `<div class="message-row ${messageClass}"><div class="message-content">
               <div class="message-text">${data.message.message}</div>
               ${attachments}
@@ -110,7 +124,7 @@
       });
 
       // get messages of a conversation
-      async function getMessages(conversation_id, current_conversation_name){
+      async function getMessages(conversation_id, current_conversation_name) {
 
         // messages failure toast
         const messagesFailureToast = Toastify({
@@ -119,58 +133,58 @@
         });
 
         let response = await fetch(`/inbox/messages/${conversation_id}`);
-        const result= await response.json();
+        const result = await response.json();
 
-        if(!result.errors && result.data) {
-            form.style.visibility = 'visible';
-            
-            const {data, user, conversation_id} = result;
+        if (!result.errors && result.data) {
+          form.style.visibility = 'visible';
 
-            participant = data.participant;
-            current_conversation_id = conversation_id;
+          const { data, user, conversation_id } = result;
 
-            if(data.messages) {
+          participant = data.participant;
+          current_conversation_id = conversation_id;
 
-              let allMessages = '';
+          if (data.messages) {
 
-              if(data.messages.length > 0) {
-                data.messages.forEach((message) => {
-                  let senderAvatar = message.sender.avatar ? `./uploads/avatars/${message.sender.avatar}` : './images/nophoto.png';
-                  const messageClass = message.sender.id === loggedinUserId ? 'you-message' : 'other-message';
-                  const showAvatar = message.sender.id === loggedinUserId ? '' : `<img src="${senderAvatar}" alt="${message.sender.name}" />`;
+            let allMessages = '';
 
-                  // message attachments
-                  let attachments = '<div class="attachments">';
+            if (data.messages.length > 0) {
+              data.messages.forEach((message) => {
+                let senderAvatar = message.sender.avatar ? `./uploads/avatars/${message.sender.avatar}` : './images/nophoto.png';
+                const messageClass = message.sender.id === loggedinUserId ? 'you-message' : 'other-message';
+                const showAvatar = message.sender.id === loggedinUserId ? '' : `<img src="${senderAvatar}" alt="${message.sender.name}" />`;
 
-                  if(message.attachment && message.attachment.length > 0) {
-                    message.attachment.forEach(attachment => {
-                      attachments += `<img src="./uploads/attachments/${attachment}" /> `;
-                    });
-                  }
+                // message attachments
+                let attachments = '<div class="attachments">';
 
-                  attachments += '</div>';
+                if (message.attachment && message.attachment.length > 0) {
+                  message.attachment.forEach(attachment => {
+                    attachments += `<img src="./uploads/attachments/${attachment}" /> `;
+                  });
+                }
 
-                  // final message html
-                  let messageHTML = `<div class="message-row ${messageClass}"><div class="message-content">
+                attachments += '</div>';
+
+                // final message html
+                let messageHTML = `<div class="message-row ${messageClass}"><div class="message-content">
                       ${showAvatar}
                       <div class="message-text">${message.text}</div>
                       ${attachments}
                       <div class="message-time">${moment(message.date_time).fromNow()}</div>
                     </div></div>`;
 
-                  allMessages += messageHTML;
-                  messageContainer.innerHTML = allMessages;
-                });
-              } else if(data.messages.length === 0) {
-                messageContainer.innerHTML = '<div class="message-row"></div>';
-              }
-
-              chatTitleContainer.textContent = current_conversation_name;
+                allMessages += messageHTML;
+                messageContainer.innerHTML = allMessages;
+              });
+            } else if (data.messages.length === 0) {
+              messageContainer.innerHTML = '<div class="message-row"></div>';
             }
+
+            chatTitleContainer.textContent = current_conversation_name;
+          }
         } else {
           messagesFailureToast.showToast();
         }
-    }
+      }
 
       // message sending
       form.onsubmit = async function (event) {
@@ -198,12 +212,14 @@
         let result = await response.json();
 
         if (!result.errors) {
-          form.reset(); // reset the form
+          form.reset();
+          document.querySelector('#chat-form > input[type=text]').placeholder = 'Type a message';
         } else {
           sendMessageFailureToast.showToast();
         }
       }
-      
+
     </script>
-  </body>
-</html>
+    </body>
+
+    </html>
