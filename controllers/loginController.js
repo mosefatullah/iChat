@@ -3,6 +3,7 @@ const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/People");
+const Conversation = require("../models/Conversation");
 
 function getLogin(req, res) {
  res.render("index");
@@ -42,7 +43,7 @@ async function login(req, res, next) {
      signed: true,
     });
     res.locals.loggedInUser = userObj;
-    res.render("inbox");
+    res.redirect("/");
    } else {
     throw createError("User not found or invalid credentials.");
    }
@@ -65,6 +66,8 @@ async function login(req, res, next) {
 
 function logout(req, res, next) {
  res.clearCookie(process.env.COOKIE_NAME);
+ res.locals.loggedInUser = null;
+ res.locals.data = null;
  res.send("You have been logged out.");
 }
 

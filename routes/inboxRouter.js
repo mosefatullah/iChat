@@ -9,8 +9,9 @@ const { addConversation } = require("../controllers/inboxController");
 const { getMessages } = require("../controllers/inboxController");
 const { sendMessage } = require("../controllers/inboxController");
 const attachmentUpload = require("../middlewares/inbox/attachmentUpload");
+const loadConversations = require("../middlewares/common/loadConversations");
 
-router.get("/", decorateHtmlResponse("Inbox"), checkLogin, getInbox);
+router.get("/", decorateHtmlResponse("Inbox"), checkLogin, loadConversations, getInbox);
 router.post("/search", checkLogin, searchUser);
 router.post("/conversation", checkLogin, addConversation);
 router.get("/messages/:conversation_id", checkLogin, getMessages);

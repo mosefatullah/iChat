@@ -19,7 +19,7 @@
 
 <body>
   <div class="menu">
-    <% if (loggedInUser) { %>
+    <% if (loggedInUser && loggedInUser.username) { %>
       <div class="menu-item"><a href="/inbox">Inbox</a></div>
       <div class="menu-item"><a href="/users">Users</a></div>
       <div class="menu-item">
@@ -37,15 +37,15 @@
         <% } %>
   </div>
   <script>
-    // toast
     const logoutToast = Toastify({
       text: "You are being logged out...",
       duration: 1000,
     });
 
     function logout() {
-      fetch("/", {
+      fetch("/logout", {
         method: "DELETE",
+        credentials: 'same-origin'
       });
       logoutToast.showToast();
       setTimeout(() => {

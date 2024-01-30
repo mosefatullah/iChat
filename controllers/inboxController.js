@@ -6,18 +6,7 @@ const Message = require("../models/Message");
 const User = require("../models/People");
 
 async function getInbox(req, res) {
- try {
-  const conversations = await Conversation.find({
-   $or: [
-    { "creator.id": req.user.userid },
-    { "participant.id": req.user.userid },
-   ],
-  });
-  res.locals.data = conversations;
-  res.render("inbox");
- } catch (err) {
-  next(err);
- }
+ res.render("inbox");
 }
 
 async function searchUser(req, res, next) {
@@ -64,23 +53,45 @@ async function searchUser(req, res, next) {
 
 async function addConversation(req, res, next) {
  try {
-  const newConversation = new Conversation({
-   creator: {
-    id: req.user.userid,
-    name: req.user.name,
-    avatar: req.user.avatar || null,
-   },
-   participant: {
-    name: req.body.participant,
-    id: req.body.id,
-    avatar: req.body.avatar || null,
-   },
+  const conversation = await Conversation.findOne({
+   $or: [
+    {
+     $and: [
+      { "creator.id": req.user.userid },
+      { "participant.id": req.body.id },
+     ],
+    },
+    {
+     $and: [
+      { "creator.id": req.body.id },
+      { "participant.id": req.user.userid },
+     ],
+    },
+   ],
   });
-
-  const result = await newConversation.save();
-  res.status(200).json({
-   message: "Conversation was added successfully!",
-  });
+  if (req.user.userid === req.body.id) {
+   throw createError("You cannot chat with yourself!");
+  }
+  if (conversation === null) {
+   const newConversation = new Conversation({
+    creator: {
+     id: req.user.userid,
+     name: req.user.name,
+     avatar: req.user.avatar || null,
+    },
+    participant: {
+     name: req.body.participant,
+     id: req.body.id,
+     avatar: req.body.avatar || null,
+    },
+   });
+   const result = await newConversation.save();
+   res.status(200).json({
+    message: "Conversation was added successfully!",
+   });
+  } else {
+   throw createError("Conversation already exists!");
+  }
  } catch (err) {
   res.status(500).json({
    errors: {
